@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "shiny-hunt-bot"
+version = "0.1.0"
+description = "A tool for hunting shiny pokemon with an emulator"
+authors = ["alecrm <alec.millar94@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "shinyHuntBot" }]
+
+[tool.poetry.dependencies]
+Pillow = "~10.1.0"
+pyautogui = "~0.9.54"
+pyDirectInput = "~1.0.4"
+pyscreeze = "~0.1.29"
+python = "^3.12"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

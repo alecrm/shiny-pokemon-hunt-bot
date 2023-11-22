@@ -1,0 +1,12 @@
+name: shiny-hunt-bot
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - mamba
+  - pip
+  - poetry
+  - python
+
+platforms:
+  - linux-64
