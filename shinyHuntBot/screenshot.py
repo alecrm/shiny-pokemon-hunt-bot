@@ -17,6 +17,7 @@ import config
 screenshot_name = f'shiny_hunt.png'
 screenshots_folder_path = f'{os.path.dirname(__file__)}/../screenshots/'
 screenshot_path = os.path.join(screenshots_folder_path, screenshot_name)
+base_image_check_folder_path = f'{os.path.dirname(__file__)}/../image_checks/'
 
 ###################################################################################################
 ###################################################################################################
@@ -42,8 +43,28 @@ def take_screenshot():
     clear_screenshots()
     pyautogui.screenshot(f'screenshots/{screenshot_name}', config.SCREENSHOT_CROP_COORDINDATES)
 
+# TODO: Set a base pixel size and have a config for screen size. Then multiply base size by value?
+def check_for_image(image_name: str) -> bool:
+    try:
+        # take_screenshot()
+        image_path = os.path.join(base_image_check_folder_path, image_name)
+        image = Image.open(image_path)
+    except IOError:
+        raise IOError(f'Could not find an image at this location: [{image_path}]')
+    
+    if pyautogui.locateOnScreen(image) == None:
+        return False
+    else:
+        return True
+    
 
-def get_pixel_color(x, y):
-    screenshot = Image.open(screenshot_path)
-    pixels = screenshot.load()
-    return pixels[x, y]
+def check_for_shiny(pokemon_name: str) -> bool:
+    return not check_for_image(f'pokemon/{pokemon_name}/image.png')
+
+
+def check_in_battle() -> bool:
+    return check_for_image('in_battle_check.png')
+
+
+def check_for_recap_screen() -> bool:
+    return check_for_image('recap_screen_check.png')

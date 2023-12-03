@@ -29,7 +29,8 @@ exit_message = 'Woah, something went oopsies'
 try_count = config.TRY_COUNT
 failure_count = 0
 
-pokemon_name = config.POKEMON_NAME
+# Capitalize pokemon name to ensure it matches the format we expect to see
+pokemon_name = config.POKEMON_NAME.capitalize()
 
 ###################################################################################################
 ###################################################################################################
@@ -72,7 +73,7 @@ def load_game():
 
 def check_for_recap_screen():
     screenshot.take_screenshot()
-    if screenshot.get_pixel_color(*config.RECAP_SCREEN_PIXEL_CHECK_COORDINATES) == config.RECAP_SCREEN_RGB:
+    if screenshot.check_for_recap_screen():
         controls.press_b()
         sleep(0.5)
         controls.open_menu()
@@ -91,18 +92,22 @@ def is_in_battle() -> bool:
     """
     global is_in_battle
     global failure_count
-    if screenshot.get_pixel_color(*config.HEALTH_BAR_PIXEL_CHECK_COORDINATES) != config.HEALTH_BAR_RGB:
+    if not screenshot.check_in_battle():
         failure_count += 1
         return False
     else:
         failure_count = 0
         return True
-
-
-def is_shiny():
-    """Checks a particular pixel location in the pokemon screenshot to see if the pokemon is shiny or not"""
-    return screenshot.get_pixel_color(*config.SHINY_COLOR_PIXEL_CHECK_COORDINATES) != config.NORMAL_COLOR_RGB
-
+    
+def is_shiny_check() -> bool:
+    global exit_message
+    global try_count
+    if screenshot.check_for_shiny(pokemon_name):
+        exit_message = f'CONGRATS ON YOUR SHINY {pokemon_name.upper()}!!! :) It only took {try_count} {"try" if try_count == 1 else "tries"}!'
+        return True
+    else:
+        try_count +=1
+        return False
 
 ###################################################################################################
 ###################################################################################################
@@ -143,14 +148,11 @@ def static_shiny_hunt():
                 continue
 
         # Checks if the pokemon is shiny
-        if is_shiny():
-            exit_message = f'CONGRATS ON YOUR SHINY {pokemon_name.upper()}!!! :) It only took {try_count} {"try" if try_count == 1 else "tries"}!'
+        if is_shiny_check():
             break
-        else:
-            try_count +=1
         
         elapsed_time = time() - start_time
-        print(f'This attempt took: {strftime("%M minutes and %S seconds", localtime(elapsed_time))}\n')\
+        print(f'This attempt took: {strftime("%M minutes and %S seconds", localtime(elapsed_time))}\n')
 
 
 def mesprit_shiny_hunt():
@@ -313,11 +315,8 @@ def mesprit_shiny_hunt():
         screenshot.take_screenshot()
 
         # Checks if the pokemon is shiny
-        if is_shiny():
-            exit_message = f'CONGRATS ON YOUR SHINY {pokemon_name.upper()}!!! :) It only took {try_count} {"try" if try_count == 1 else "tries"}!'
+        if is_shiny_check():
             break
-        else:
-            try_count += 1
         
         elapsed_time = time() - start_time
         print(f'This attempt took: {strftime("%M minutes and %S seconds", localtime(elapsed_time))}\n')
