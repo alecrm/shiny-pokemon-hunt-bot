@@ -39,9 +39,8 @@ def clear_screenshots():
 
 def take_screenshot():
     """Takes a screenshot of the desktop and crops it down to the pokemon battle. Update the config"""
-    pyautogui.screenshot(f'screenshots/{screenshot_name}')
-    screenshot = Image.open(screenshot_path)
-    screenshot.crop(config.SCREENSHOT_CROP_COORDINDATES).save(screenshot_path)
+    clear_screenshots()
+    pyautogui.screenshot(f'screenshots/{screenshot_name}', config.SCREENSHOT_CROP_COORDINDATES)
 
 
 def get_pixel_color(x, y):

@@ -26,9 +26,10 @@ is_in_battle = True
 exit_message = 'Woah, something went oopsies'
 
 # Counters
-try_count = 1
- # Should start at 1. Set to last run attempt if you stop and restart the program
+try_count = config.TRY_COUNT
 failure_count = 0
+
+pokemon_name = config.POKEMON_NAME
 
 ###################################################################################################
 ###################################################################################################
@@ -48,33 +49,40 @@ def skip_dialogue(num_times: int):
         i += 1
 
 
-def get_to_battle():
+def load_game():
     """
     Hacky method to maneuver from resetting the game to initiating the static encounter.
     We do a combination of pressing 'A' and waiting some time to get through each screen.
     """
     # Soft reset emulator
     controls.reset()
-    sleep(2.2)
+    sleep(2)
 
     # Press A to skip intro screen
     controls.press_a()
-    sleep(1)
+    sleep(0.5)
 
     # Press A to move past title screen
     controls.press_a()
-    sleep(1)
+    sleep(0.5)
 
     # Press A to load the game
     controls.press_a()
-    sleep(1)
+    sleep(0.25)
 
-    # Press A to battle Pokemon
-    controls.press_a()
-    sleep(0.2)
-
-    skip_dialogue(1)
-    sleep(2.5)
+def check_for_recap_screen():
+    screenshot.take_screenshot()
+    if screenshot.get_pixel_color(*config.RECAP_SCREEN_PIXEL_CHECK_COORDINATES) == config.RECAP_SCREEN_RGB:
+        controls.press_b()
+        sleep(0.5)
+        controls.open_menu()
+        controls.move_down(4)
+        controls.press_a()
+        sleep(0.3)
+        controls.press_a()
+        sleep(0.3)
+        controls.press_a()
+        sleep(4.2)
 
 
 def is_in_battle() -> bool:
@@ -111,7 +119,15 @@ def static_shiny_hunt():
         print(f'{strftime("%Y-%m-%d %I:%M:%S %p", localtime(time()))} --- Attempt number: {try_count}')
 
         # Soft resets emulator and initiates the battle
-        get_to_battle()
+        load_game()
+        check_for_recap_screen()
+
+        # Press A to battle Pokemon
+        controls.press_a()
+        sleep(0.2)
+
+        skip_dialogue(1)
+        sleep(2.5)
 
         # Clears contents of the screenshot folder and takes a screenshot of the battle
         screenshot.clear_screenshots()
@@ -120,7 +136,7 @@ def static_shiny_hunt():
         # Confirms the emulator successfully got into the battle. Kills the app after 3 consecutive failures
         if not is_in_battle():
             print(f'Failed to get into the battle. Trying again! Failure count: {failure_count}')
-            if failure_count > 2:
+            if failure_count >= 10:
                 exit_message = f'Cycle continuously failed to get into a battle. Killing app.'
                 break
             else:
@@ -128,42 +144,30 @@ def static_shiny_hunt():
 
         # Checks if the pokemon is shiny
         if is_shiny():
-            exit_message = f'CONGRATS ON YOUR SHINY {config.POKEMON_NAME.upper()}!!! :) It only took {try_count} {"try" if try_count == 1 else "tries"}!'
+            exit_message = f'CONGRATS ON YOUR SHINY {pokemon_name.upper()}!!! :) It only took {try_count} {"try" if try_count == 1 else "tries"}!'
             break
         else:
             try_count +=1
         
         elapsed_time = time() - start_time
-        print(f'This attempt took: {strftime("%M minutes and %S seconds", localtime(elapsed_time))}\n')
+        print(f'This attempt took: {strftime("%M minutes and %S seconds", localtime(elapsed_time))}\n')\
 
 
 def mesprit_shiny_hunt():
     global try_count
     global exit_message
-    should_restart = False
+    
 
     while True:
+        should_restart = False
         start_time = time()
         # Displays the current attempt number
         print(f'{strftime("%Y-%m-%d %I:%M:%S %p", localtime(time()))} --- Attempt number: {try_count}')
 
         ######################################### STARTING GAME #########################################
         # Soft resets game
-        controls.reset()
-        controls.press_a()
-        sleep(2.2)
-
-        # Press A to skip intro screen
-        controls.press_a()
-        sleep(1)
-
-        # Press A to move past title screen
-        controls.press_a()
-        sleep(1)
-
-        # Press A to load the game
-        controls.press_a()
-        sleep(1)
+        load_game()
+        check_for_recap_screen()
 
         ################################### TRIGGERING MESPRIT HUNT ####################################
         # Skip through Mesprit disappearing
@@ -254,6 +258,7 @@ def mesprit_shiny_hunt():
         
         # Checks to see if we broke out of the mesprit hunt to restart
         if should_restart:
+            print('TOOK TOO LONG TO HUNT MESPRIT. RESTARTING ATTEMPT!!!')
             continue
 
         ####################################### Apply Max Repel ########################################
@@ -297,6 +302,11 @@ def mesprit_shiny_hunt():
             controls.run_right_for(0.1)
             controls.run_left_for(0.1)
             sleep(0.5)
+
+        # Checks to see if we broke out of the mesprit hunt to restart
+        if should_restart:
+            print('TOOK TOO LONG TO HUNT MESPRIT. RESTARTING ATTEMPT!!!')
+            continue
         
         ################################## Check for Shiny Mesprit #####################################
         screenshot.clear_screenshots()
@@ -304,7 +314,7 @@ def mesprit_shiny_hunt():
 
         # Checks if the pokemon is shiny
         if is_shiny():
-            exit_message = f'CONGRATS ON YOUR SHINY {config.POKEMON_NAME.upper()}!!! :) It only took {try_count} {"try" if try_count == 1 else "tries"}!'
+            exit_message = f'CONGRATS ON YOUR SHINY {pokemon_name.upper()}!!! :) It only took {try_count} {"try" if try_count == 1 else "tries"}!'
             break
         else:
             try_count += 1
@@ -313,18 +323,35 @@ def mesprit_shiny_hunt():
         print(f'This attempt took: {strftime("%M minutes and %S seconds", localtime(elapsed_time))}\n')
 
 
+def cresselia_shiny_hunt():
+    raise NotImplementedError('Cresselia shiny hunt method has not been implemented yet')
 
-if __name__ == "__main__":    
+
+
+# TODO: Update is_shiny() method so that it compares an partial image of the hunted pokemon against the screenshot
+#        - Have a folder structure of pokemon_compare_images/$POKEMON_NAME/image.png
+
+if __name__ == "__main__":
+    if pokemon_name not in config.VALID_POKEMON_LIST:
+        raise ValueError(f'[{pokemon_name}] is not a valid pokemon to shiny hunt! Please select from the list of available pokemon')
+    
     sleep(3) # Gives 3 seconds to make sure the emulator window is active after starting
     # screenshot.clear_screenshots()
     # screenshot.take_screenshot()
 
-    print(f'------------------------------------------------------------------\nStarting hunt for shiny {config.POKEMON_NAME}!\n------------------------------------------------------------------')
+    print(f'------------------------------------------------------------------\nStarting hunt for shiny {pokemon_name}!\n------------------------------------------------------------------')
     pyautogui.click(*config.EMULATOR_EMPTY_CLICK_COORDINATES)
     sleep(0.1)
+
     # SHINY HUNT FUNCTION CALL
-    mesprit_shiny_hunt()
-    # static_shiny_hunt()
+    match pokemon_name:
+        case 'Mesprit':
+            mesprit_shiny_hunt()
+        case 'Cresellia':
+            cresselia_shiny_hunt()
+        case _:
+            static_shiny_hunt()
+
     
     # Once the app exits the while loop, prints the reason for exiting
     print(f'------------------------------------------------------------------\n{exit_message}\nShutting down app\n------------------------------------------------------------------')
