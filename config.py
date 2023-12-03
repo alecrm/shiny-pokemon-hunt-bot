@@ -6,6 +6,8 @@
 EMULATOR_EMPTY_CLICK_COORDINATES = (3022, 1246)         # x, y pixel coordinates of where to click into the emulator without clicking on the touch screen for DS emulators      THIS SHOULD BE UPDATED
 MESPRIT_HUNT_TIMEOUT = 1200                             # Amount of time in seconds before assuming the run has failed and restarting the next run                              THIS SHOULD BE UPDATED
 BATTLE_START_TIMEOUT = 300                              # Amount of time in seconds before assuming the run has failed and restarting the next run                              THIS SHOULD BE UPDATED
+TRY_COUNT = 1
+# ^^^ Current attempt number. Should start at 1 at the beginning of a hunt and be updated if you kill the app during the hunt and start it up again
 
 
 # CONTROL VARIABLES
@@ -26,22 +28,26 @@ LEFT_BUTTON_KEYBIND = 'left'                            # Update to what your em
 ####### APP CONFIGS #######
 ###########################
 
+VALID_POKEMON_LIST = ['Drifloon', 'Spiritomb', 'Rotom', 'Uxie', 'Mesprit', 'Azelf', 'Dialga', 'Palkia', 'Heatran', 'Regigigas', 'Giratina', 'Cresselia', 'Darkrai', 'Shaymin', 'Arceus']
+
 # POKEMON NAME
-POKEMON_NAME = 'Azelf'
+POKEMON_NAME = 'Drifloon'
 
 # SCREENSHOT VARIABLES
-SCREENSHOT_CROP_COORDINDATES = (2635, 88, 5119, 1439)   # LEFT, TOP, RIGHT, BOTTOM                                                                                              THIS SHOULD BE UPDATED
-
+SCREENSHOT_CROP_COORDINDATES = (2635, 88, 2484, 1351)   # LEFT, TOP, WIDTH, HEIGHT                                                                                              THIS SHOULD BE UPDATED
 
 # PIXEL CHECK VARIABLES
+RECAP_SCREEN_PIXEL_CHECK_COORDINATES = (2220, 1060)
+RECAP_SCREEN_RGB = (170, 235, 243)
+
 HEALTH_BAR_PIXEL_CHECK_COORDINATES = (1170, 310)         # x, y pixel coordinates of where to check the health bar RGB                                                          THIS SHOULD BE UPDATED
 HEALTH_BAR_RGB = (24, 195, 32)                          # RGB values of health bar. This should not need to be updated
 
-SHINY_COLOR_PIXEL_CHECK_COORDINATES = (2004, 342)       # x, y pixel coordinates of where to check the pokemon color RGB                                                        THIS SHOULD BE UPDATED
-NORMAL_COLOR_RGB = (182, 207, 247)                      # RGB values of the pokemon's NORMAL color. We check to make sure to stop the app if anything BUT this value is found   THIS SHOULD BE UPDATED
+SHINY_COLOR_PIXEL_CHECK_COORDINATES = ('X_COORDINATE', 'Y_COORDINATE')       # x, y pixel coordinates of where to check the pokemon color RGB                                   THIS SHOULD BE UPDATED
+NORMAL_COLOR_RGB = ('R_VALUE', 'G_VALUE', 'B_VALUE')    # RGB values of the pokemon's NORMAL color. We check to make sure to stop the app if anything BUT this value is found   THIS SHOULD BE UPDATED
 
 HAT_COLOR_CHECK_COORDINATES = (1550, 570)               # x, y pixel coordinates of where to check RGB for Dia's hat                                                            THIS SHOULD BE UPDATED
-HAT_COLOR_RGB_LIST = [(219, 101, 105), (174, 81, 73), (190, 69, 65), (174, 69, 65), (134, 69, 93), (125, 60, 109), (219, 109, 125), (223, 109, 125), (223, 109, 121), (182, 89, 125)]
+HAT_COLOR_RGB_LIST = [(219, 101, 105), (174, 81, 73), (190, 69, 65), (174, 69, 65), (134, 69, 93), (125, 60, 109), (219, 109, 125), (223, 109, 125), (223, 109, 121), (182, 89, 125), (138, 69, 121), (154, 77, 125)]
                                                         # ^^^ List of RGB colors that Dia's hat could be depending on the time of day and light shading. This should not need to be updated
 
 MESPRIT_MAP_ICON_CHECK_COORDINATES = (150, 806)         # x, y pixel coordinates of where to check the map icon RGB                                                             THIS SHOULD BE UPDATED
