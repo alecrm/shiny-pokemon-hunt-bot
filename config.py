@@ -4,8 +4,8 @@
 
 # SYSTEM CONFIG VARIABLES
 EMULATOR_EMPTY_CLICK_COORDINATES = (3022, 1246)         # x, y pixel coordinates of where to click into the emulator without clicking on the touch screen for DS emulators      THIS SHOULD BE UPDATED
-MESPRIT_HUNT_TIMEOUT = 1200                             # Amount of time in seconds before assuming the run has failed and restarting the next run                              THIS SHOULD BE UPDATED
-BATTLE_START_TIMEOUT = 300                              # Amount of time in seconds before assuming the run has failed and restarting the next run                              THIS SHOULD BE UPDATED
+MESPRIT_HUNT_TIMEOUT = 1200                             # Amount of time in seconds before assuming the run has failed and restarting the next run                              THIS CAN BE UPDATED
+BATTLE_START_TIMEOUT = 300                              # Amount of time in seconds before assuming the run has failed and restarting the next run                              THIS CAN BE UPDATED
 TRY_COUNT = 1
 # ^^^ Current attempt number. Should start at 1 at the beginning of a hunt and be updated if you kill the app during the hunt and start it up again
 
