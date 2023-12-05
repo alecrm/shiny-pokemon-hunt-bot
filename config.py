@@ -27,7 +27,15 @@ LEFT_BUTTON_KEYBIND = 'left'                            # Update to what your em
 ###########################
 ####### APP CONFIGS #######
 ###########################
-
+# TODO: Need to add screenshots for the following pokemon:
+#           - Dialga
+#           - Palkia
+#           - Heatran
+#           - Regigigas
+#           - Cresselia
+#           - Darkrai
+#           - Shaymin
+#           - Arceus
 VALID_POKEMON_LIST = ['Drifloon', 'Spiritomb', 'Rotom', 'Uxie', 'Mesprit', 'Azelf', 'Dialga', 'Palkia', 'Heatran', 'Regigigas', 'Giratina', 'Cresselia', 'Darkrai', 'Shaymin', 'Arceus']
 
 
