@@ -77,7 +77,7 @@ def check_for_image(image_name: str, search_image_path: str = None, confidence: 
     
 
 def check_for_shiny(pokemon_name: str) -> bool:
-    return not check_for_image(f'pokemon/{pokemon_name}/image.png')
+    return not check_for_image(f'pokemon/{pokemon_name}.png')
 
 
 def check_in_battle() -> bool:
