@@ -71,6 +71,7 @@ def load_game():
     controls.press_a()
     sleep(0.25)
 
+
 def check_for_recap_screen():
     screenshot.take_screenshot()
     if screenshot.check_for_recap_screen():
@@ -120,7 +121,7 @@ def static_shiny_hunt():
 
     while True:
         start_time = time()
-        # Displays the current attempt number
+        # Displays the current attempt start time and number
         print(f'{strftime("%Y-%m-%d %I:%M:%S %p", localtime(time()))} --- Attempt number: {try_count}')
 
         # Soft resets emulator and initiates the battle
@@ -134,11 +135,7 @@ def static_shiny_hunt():
         skip_dialogue(1)
         sleep(2.5)
 
-        # Clears contents of the screenshot folder and takes a screenshot of the battle
-        screenshot.clear_screenshots()
-        screenshot.take_screenshot()
-
-        # Confirms the emulator successfully got into the battle. Kills the app after 3 consecutive failures
+        # Confirms the emulator successfully got into the battle. Kills the app after 10 consecutive failures
         if not is_in_battle():
             print(f'Failed to get into the battle. Trying again! Failure count: {failure_count}')
             if failure_count >= 10:
@@ -150,9 +147,14 @@ def static_shiny_hunt():
         # Checks if the pokemon is shiny
         if is_shiny_check():
             break
-        
+
+        # Calculates and prints failed attempt length
         elapsed_time = time() - start_time
         print(f'This attempt took: {strftime("%M minutes and %S seconds", localtime(elapsed_time))}\n')
+    
+    # Calculates and prints successful attempt length
+    elapsed_time = time() - start_time
+    print(f'This attempt took: {strftime("%M minutes and %S seconds", localtime(elapsed_time))}\n')
 
 
 def mesprit_shiny_hunt():
@@ -163,7 +165,7 @@ def mesprit_shiny_hunt():
     while True:
         should_restart = False
         start_time = time()
-        # Displays the current attempt number
+        # Displays the current attempt start time and number
         print(f'{strftime("%Y-%m-%d %I:%M:%S %p", localtime(time()))} --- Attempt number: {try_count}')
 
         ######################################### STARTING GAME #########################################
@@ -228,25 +230,11 @@ def mesprit_shiny_hunt():
 
         ####################################### Hunt for Mesprit ########################################
         # Continues to move between Jubilife City & Route 202 until Mesprit arrives
-        is_mesprit_here = False # Boolean to track if Mesprit has arrived
         start_hunt_time = time() # Used to track how long we're hunting for Mesprit
         while True:
-            attempts = 1
-                # Takes a screenshot 3 times when checking if Mesprit is there to try to avoid capturing
-                #  the screenshot while the mesprit icon is blinking off
-            while attempts <= 3:
-                screenshot.clear_screenshots()
-                screenshot.take_screenshot()
-                # If the mesprit icon is on Route 202 on our map, set is_mesprit_here to true
-                if screenshot.get_pixel_color(*config.MESPRIT_MAP_ICON_CHECK_COORDINATES) == config.MESPRIT_MAP_ICON_COLOR_RGB:
-                    print(f'Noticed Mesprit on screenshot attempt: {attempts}')
-                    is_mesprit_here = True
-                    break
-
-                attempts += 1 # Otherwise, increase our attempt count
 
             # Breaks out of the loop once Mesprit has arrived
-            if is_mesprit_here:
+            if screenshot.check_mesprit_is_here():
                 break
 
             # Restarts the app if we've been trying for more than 20 minutes
@@ -287,11 +275,10 @@ def mesprit_shiny_hunt():
         # Continues to move in the grass until we find Mesprit
         start_battle_time = time() # Used to track how long we've been trying to initiate a battle
         while True: 
-            screenshot.clear_screenshots()
-            screenshot.take_screenshot()
+            # screenshot.take_screenshot()
 
-            # If Dia's hat is no longer visible, we recognize we're in battle and wait for the battle to start
-            if screenshot.get_pixel_color(*config.HAT_COLOR_CHECK_COORDINATES) not in config.HAT_COLOR_RGB_LIST:
+            # If we don't see the route path, we recognize we're in a battle and break out of the loop
+            if not screenshot.check_for_path():
                 sleep(2.2)
                 break
 
@@ -311,15 +298,17 @@ def mesprit_shiny_hunt():
             continue
         
         ################################## Check for Shiny Mesprit #####################################
-        screenshot.clear_screenshots()
-        screenshot.take_screenshot()
-
         # Checks if the pokemon is shiny
         if is_shiny_check():
             break
         
+        # Calculates and prints failed attempt length
         elapsed_time = time() - start_time
         print(f'This attempt took: {strftime("%M minutes and %S seconds", localtime(elapsed_time))}\n')
+    
+    # Calculates and prints successful attempt length
+    elapsed_time = time() - start_time
+    print(f'This attempt took: {strftime("%M minutes and %S seconds", localtime(elapsed_time))}\n')
 
 
 def cresselia_shiny_hunt():
@@ -350,7 +339,6 @@ if __name__ == "__main__":
             cresselia_shiny_hunt()
         case _:
             static_shiny_hunt()
-
     
     # Once the app exits the while loop, prints the reason for exiting
     print(f'------------------------------------------------------------------\n{exit_message}\nShutting down app\n------------------------------------------------------------------')

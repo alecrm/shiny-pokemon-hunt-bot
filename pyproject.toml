@@ -12,6 +12,7 @@ pyautogui = "~0.9.54"
 pyDirectInput = "~1.0.4"
 pyscreeze = "~0.1.29"
 python = "^3.12"
+opencv-python = "^4.8.1.78"
 
 [build-system]
 requires = ["poetry-core"]
