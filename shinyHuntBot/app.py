@@ -132,7 +132,10 @@ def static_shiny_hunt():
         controls.press_a()
         sleep(0.2)
 
-        skip_dialogue(1)
+        if pokemon_name == 'Rotom':
+            skip_dialogue(3)
+        else:
+            skip_dialogue(1)
         sleep(2.5)
 
         # Confirms the emulator successfully got into the battle. Kills the app after 10 consecutive failures
@@ -329,7 +332,7 @@ if __name__ == "__main__":
 
     print(f'------------------------------------------------------------------\nStarting hunt for shiny {pokemon_name}!\n------------------------------------------------------------------')
     pyautogui.click(*config.EMULATOR_EMPTY_CLICK_COORDINATES)
-    sleep(0.1)
+    sleep(0.3)
 
     # SHINY HUNT FUNCTION CALL
     match pokemon_name:
