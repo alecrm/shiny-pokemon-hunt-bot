@@ -68,8 +68,9 @@ def check_for_image(image_name: str, search_image_path: str = None, confidence: 
         try:
             search_image = Image.open(screenshot_path)
         except IOError:
-            raise IOError(f'Could not find an image at this location: [{screenshot_path}]')        
+            raise IOError(f'Could not find an image at this location: [{screenshot_path}]')
 
+    search_image = search_image.resize((2484, 1351))
     if pyautogui.locate(image, search_image, confidence=confidence) == None:
         return False
     else:
