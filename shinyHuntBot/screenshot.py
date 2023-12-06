@@ -120,7 +120,7 @@ def check_mesprit_is_here() -> bool:
             attempt += 1
 
     if is_icon_visible:
-        return check_for_image('mesprit_location_images/mesprit_location_check-1.png', image_path, confidence=0.75) or check_for_image('mesprit_location_images/mesprit_location_check-2.png', image_path, confidence=0.75)
+        return check_for_image('mesprit_location_images/mesprit_location_check-1.png', image_path, confidence=0.788) or check_for_image('mesprit_location_images/mesprit_location_check-2.png', image_path, confidence=0.788)
     else:
         return False
 
