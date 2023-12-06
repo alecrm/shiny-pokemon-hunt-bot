@@ -50,7 +50,7 @@ def take_screenshot(name: str = None, region=None):
 
 
 # TODO: Set a base pixel size and have a config for screen size. Then multiply base size by value?
-def check_for_image(image_name: str, search_image_path: str = None, confidence: int = 0.999) -> bool:
+def check_for_image(image_name: str, search_image_path: str = None, confidence: int = 0.9) -> bool:
     search_image = None
     try:
         image_path = os.path.join(base_image_check_folder_path, image_name)
@@ -78,7 +78,7 @@ def check_for_image(image_name: str, search_image_path: str = None, confidence: 
     
 
 def check_for_shiny(pokemon_name: str) -> bool:
-    return not check_for_image(f'pokemon/{pokemon_name}.png')
+    return not check_for_image(f'pokemon/{pokemon_name}.png', confidence=0.97)
 
 
 def check_in_battle() -> bool:
@@ -106,7 +106,7 @@ def check_mesprit_is_here() -> bool:
             attempt += 1
 
     if is_icon_visible:
-        return check_for_image('mesprit_location_images/mesprit_location_check-1.png', image_path, confidence=0.9) or check_for_image('mesprit_location_images/mesprit_location_check-2.png', image_path, confidence=0.9)
+        return check_for_image('mesprit_location_images/mesprit_location_check-1.png', image_path, confidence=0.75) or check_for_image('mesprit_location_images/mesprit_location_check-2.png', image_path, confidence=0.75)
     else:
         return False
 

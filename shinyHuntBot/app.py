@@ -326,6 +326,8 @@ if __name__ == "__main__":
     if pokemon_name not in config.VALID_POKEMON_LIST:
         raise ValueError(f'[{pokemon_name}] is not a valid pokemon to shiny hunt! Please select from the list of available pokemon')
     
+    # TODO: Look into finding the screen size of the emulator. Either by having a screenshot of my size in the repo that I search for OR finding some way to dynamically grab the window size
+
     sleep(3) # Gives 3 seconds to make sure the emulator window is active after starting
     # screenshot.clear_screenshots()
     # screenshot.take_screenshot()
