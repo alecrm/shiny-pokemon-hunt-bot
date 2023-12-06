@@ -1,14 +1,29 @@
-############################
-##### EMULATOR CONFIGS #####
-############################
+# TODO: Need to add screenshots for the following pokemon:
+#           - Dialga
+#           - Palkia
+#           - Heatran
+#           - Regigigas
+#           - Cresselia
+#           - Darkrai
+#           - Shaymin
+#           - Arceus
+# List for reference of what can be hunted
+VALID_POKEMON_LIST = ['SETUP', 'Drifloon', 'Spiritomb', 'Rotom', 'Uxie', 'Mesprit', 'Azelf', 'Dialga', 'Palkia', 'Heatran', 'Regigigas', 'Giratina', 'Cresselia', 'Darkrai', 'Shaymin', 'Arceus']
 
-# SYSTEM CONFIG VARIABLES
-EMULATOR_EMPTY_CLICK_COORDINATES = (3022, 1246)         # x, y pixel coordinates of where to click into the emulator without clicking on the touch screen for DS emulators      THIS SHOULD BE UPDATED
-MESPRIT_HUNT_TIMEOUT = 1200                             # Amount of time in seconds before assuming the run has failed and restarting the next run                              THIS CAN BE UPDATED
-BATTLE_START_TIMEOUT = 300                              # Amount of time in seconds before assuming the run has failed and restarting the next run                              THIS CAN BE UPDATED
+###########################
+####### KEY CONFIGS #######
+###########################
+POKEMON_NAME = 'SETUP'
 TRY_COUNT = 1
 # ^^^ Current attempt number. Should start at 1 at the beginning of a hunt and be updated if you kill the app during the hunt and start it up again
 
+SCREENSHOT_CROP_COORDINDATES = (2635, 88, 2484, 1351)   # LEFT, TOP, WIDTH, HEIGHT                                                                                              THIS SHOULD BE UPDATED
+EMULATOR_EMPTY_CLICK_COORDINATES = (3022, 1246)         # x, y pixel coordinates of where to click into the emulator without clicking on the touch screen for DS emulators      THIS SHOULD BE UPDATED
+
+
+############################
+##### EMULATOR CONFIGS #####
+############################
 
 # CONTROL VARIABLES
 A_BUTTON_KEYBIND = 'x'                                  # Update to what your emulator's keyboard binds to 'A' are                                                              THIS SHOULD BE UPDATED
@@ -24,31 +39,14 @@ DOWN_BUTTON_KEYBIND = 'down'                            # Update to what your em
 LEFT_BUTTON_KEYBIND = 'left'                            # Update to what your emulator's keyboard binds to 'Move Left' are                                                      THIS SHOULD BE UPDATED
 
 
-###########################
-####### APP CONFIGS #######
-###########################
-# TODO: Need to add screenshots for the following pokemon:
-#           - Dialga
-#           - Palkia
-#           - Heatran
-#           - Regigigas
-#           - Cresselia
-#           - Darkrai
-#           - Shaymin
-#           - Arceus
-VALID_POKEMON_LIST = ['Drifloon', 'Spiritomb', 'Rotom', 'Uxie', 'Mesprit', 'Azelf', 'Dialga', 'Palkia', 'Heatran', 'Regigigas', 'Giratina', 'Cresselia', 'Darkrai', 'Shaymin', 'Arceus']
-
-
-# POKEMON NAME
-POKEMON_NAME = 'Giratina'
-
-
-# SCREENSHOT VARIABLES
-SCREENSHOT_CROP_COORDINDATES = (2635, 88, 2484, 1351)   # LEFT, TOP, WIDTH, HEIGHT                                                                                              THIS SHOULD BE UPDATED
-
+# SYSTEM CONFIG VARIABLES
+MESPRIT_HUNT_TIMEOUT = 1200                             # Amount of time in seconds before assuming the run has failed and restarting the next run                              THIS CAN BE UPDATED
+BATTLE_START_TIMEOUT = 300                              # Amount of time in seconds before assuming the run has failed and restarting the next run                              THIS CAN BE UPDATED
+MESSAGE_SPACING_SYMBOLS = '-----------------------------------------------------------------------------'
 
 # TODO: After a day of cycling through Mesprit, determine if these can be deleted
 # PIXEL CHECK VARIABLES
 # HAT_COLOR_CHECK_COORDINATES = (1550, 570)               # x, y pixel coordinates of where to check RGB for Dia's hat                                                            THIS SHOULD BE UPDATED
 # HAT_COLOR_RGB_LIST = [(219, 101, 105), (174, 81, 73), (190, 69, 65), (174, 69, 65), (134, 69, 93), (125, 60, 109), (219, 109, 125), (223, 109, 125), (223, 109, 121), (182, 89, 125), (138, 69, 121), (154, 77, 125)]
                                                         # ^^^ List of RGB colors that Dia's hat could be depending on the time of day and light shading. This should not need to be update
+

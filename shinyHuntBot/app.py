@@ -17,6 +17,8 @@ import screenshot
 ###################################################################################################
 ###################################################################################################
 
+
+
 # VARIABLES
 ###################################################################################################
 # boolean checks
@@ -30,14 +32,15 @@ try_count = config.TRY_COUNT
 failure_count = 0
 
 # Capitalize pokemon name to ensure it matches the format we expect to see
-pokemon_name = config.POKEMON_NAME.capitalize()
+pokemon_name = config.POKEMON_NAME if config.POKEMON_NAME == 'SETUP' else config.POKEMON_NAME.capitalize()
 
 ###################################################################################################
 ###################################################################################################
+
+
 
 # FUNCTIONS
 ###################################################################################################
-
 def skip_dialogue(num_times: int):
     """
     Skips through dialogue when initiating the static encounter.
@@ -73,6 +76,12 @@ def load_game():
 
 
 def check_for_recap_screen():
+    """
+    Looks to see if the game is showing the recap screen after loading a save file.
+    If it is, we cancel out of it and save the game quickly so that it stops showing up.
+    This adds time to the run where we save to stop it from appearing, but ultimately saves
+    time across all following runs
+    """
     screenshot.take_screenshot()
     if screenshot.check_for_recap_screen():
         controls.press_b()
@@ -89,7 +98,7 @@ def check_for_recap_screen():
 
 def is_in_battle() -> bool:
     """
-    Checks a particular pixel location in the battle screenshot to make sure the enemy's health bar is visible
+    Checks if we are in a battle by searching the game screenshot for the enemy's health bar
     """
     global is_in_battle
     global failure_count
@@ -99,8 +108,14 @@ def is_in_battle() -> bool:
     else:
         failure_count = 0
         return True
-    
+
+
 def is_shiny_check() -> bool:
+    """
+    Checks if the pokemon is shiny be looking to see if the pokemon's default picture is found
+    in the game screenshot. If it IS found, the pokemon is not shiny. If it IS NOT found,
+    the pokemon is likely shiny (or potentially something went wrong)
+    """
     global exit_message
     global try_count
     if screenshot.check_for_shiny(pokemon_name):
@@ -113,9 +128,16 @@ def is_shiny_check() -> bool:
 ###################################################################################################
 ###################################################################################################
 
+
+
 # MAIN CALL FUNCTIONS
 ###################################################################################################
 def static_shiny_hunt():
+    """
+    Main function for hunting static encounter pokemon. This effectively handles Rotom, Spiritomb,
+    Drifloon, and all legendaries except for Mesprit and Cresselia. Basically, we just soft reset the
+    emulator, trigger the static encounter battle, and check if the pokemon is shiny. If not, we repeat
+    """
     global try_count
     global exit_message
 
@@ -161,10 +183,13 @@ def static_shiny_hunt():
 
 
 def mesprit_shiny_hunt():
+    """
+    Main function for hunting Mesprit. Because the roaming pokemon (Mesprit and Cresselia)
+    are so unique (aka annoying), they get their entire own function. Yay!
+    """
     global try_count
     global exit_message
     
-
     while True:
         should_restart = False
         start_time = time()
@@ -314,28 +339,75 @@ def mesprit_shiny_hunt():
     print(f'This attempt took: {strftime("%M minutes and %S seconds", localtime(elapsed_time))}\n')
 
 
+# TODO: Implement cresselia_shiny_hunt
 def cresselia_shiny_hunt():
+    """
+    Main function for hunting Cresselia. Because the roaming pokemon (Cresselia and Mesprit)
+    are so unique (aka annoying), they get their entire own function. Yay!
+    """
     raise NotImplementedError('Cresselia shiny hunt method has not been implemented yet')
 
+
+def setup_crop_coordinates():
+    """
+    Setup method for guiding users through getting the values to set the [SCREEN_CROP_COORDINATES] config value
+    """
+    # Grabs the LEFT coordinate value
+    print(f'\nPlease position your mouse at the very left side of the emulator window within 5 seconds')
+    sleep(5)
+    left, _ = pyautogui.position()
+    print(f'Left value: {left}\n{config.MESSAGE_SPACING_SYMBOLS}')
+
+    # Grabs the TOP coordinate value
+    print(f'\nPlease position your mouse at the top of the actual emulator window (Just below the menu bar) within 5 seconds')
+    sleep(5)
+    _, top = pyautogui.position()
+    print(f'Top value: {top}\n{config.MESSAGE_SPACING_SYMBOLS}')
+
+    # Grabs the WIDTH coordinate value
+    print(f'\nPlease position your mouse at the very right side of the emulator window within 5 seconds')
+    sleep(5)
+    right, _ = pyautogui.position()
+    width = right - left
+    print(f'Width value: {width}\n{config.MESSAGE_SPACING_SYMBOLS}')
+
+    # Grabs the HEIGHT coordinate value
+    print(f'\nPlease position your mouse at the very bottom side of the emulator window within 5 seconds')
+    sleep(5)
+    _, bottom = pyautogui.position()
+    height = bottom - top
+    print(f'Bottom value: {bottom}\n{config.MESSAGE_SPACING_SYMBOLS}')
+
+    config_value = (left, top, width, height)
+    print(f'\nPlease replace the [SCREEN_CROP_COORDINATES] with this value (including parentheses): {config_value}')
 
 
 # TODO: Update is_shiny() method so that it compares an partial image of the hunted pokemon against the screenshot
 #        - Have a folder structure of pokemon_compare_images/$POKEMON_NAME/image.png
-
 if __name__ == "__main__":
-    if pokemon_name not in config.VALID_POKEMON_LIST:
+    """
+    Main app function call. Chooses which shiny hunt function to
+    use on the the pokemon set in the [POKEMON_NAME] config value
+    """
+    # Confirms the pokemon name set in the config file is a valid option
+    if pokemon_name not in config.VALID_POKEMON_LIST and pokemon_name != 'SETUP':
         raise ValueError(f'[{pokemon_name}] is not a valid pokemon to shiny hunt! Please select from the list of available pokemon')
+        
+    # Quick pause at the start of the app in case the user needs to switch to the emulator window
+    sleep(3)
     
-    sleep(3) # Gives 3 seconds to make sure the emulator window is active after starting
-    # screenshot.clear_screenshots()
-    # screenshot.take_screenshot()
-
-    print(f'------------------------------------------------------------------\nStarting hunt for shiny {pokemon_name}!\n------------------------------------------------------------------')
-    pyautogui.click(*config.EMULATOR_EMPTY_CLICK_COORDINATES)
-    sleep(0.3)
+    # Decides what startup message to print
+    if pokemon_name == 'SETUP':
+        print(f'{config.MESSAGE_SPACING_SYMBOLS}\nRunning Screen Position Setup. Please ensure your emulator window is full screen and active\n{config.MESSAGE_SPACING_SYMBOLS}')
+    else:
+        print(f'{config.MESSAGE_SPACING_SYMBOLS}\nStarting hunt for shiny {pokemon_name}!\n{config.MESSAGE_SPACING_SYMBOLS}')
+        pyautogui.click(*config.EMULATOR_EMPTY_CLICK_COORDINATES)
+        sleep(0.3)
 
     # SHINY HUNT FUNCTION CALL
     match pokemon_name:
+        case 'SETUP':
+            setup_crop_coordinates()
         case 'Mesprit':
             mesprit_shiny_hunt()
         case 'Cresellia':
@@ -343,5 +415,8 @@ if __name__ == "__main__":
         case _:
             static_shiny_hunt()
     
-    # Once the app exits the while loop, prints the reason for exiting
-    print(f'------------------------------------------------------------------\n{exit_message}\nShutting down app\n------------------------------------------------------------------')
+    # Once the shiny hunt exits, prints the reason for exiting
+    if pokemon_name == 'SETUP':
+        print(f'{config.MESSAGE_SPACING_SYMBOLS}\nExiting setup! Remember to set a pokemon to hunt in the config value [POKEMON_NAME] :) Happy shiny hunting!\n{config.MESSAGE_SPACING_SYMBOLS}')
+    else:
+        print(f'{config.MESSAGE_SPACING_SYMBOLS}\n{exit_message}\nShutting down app\n{config.MESSAGE_SPACING_SYMBOLS}')
