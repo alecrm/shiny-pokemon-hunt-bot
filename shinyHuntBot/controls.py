@@ -20,7 +20,6 @@ def press_button(button: str, pause=0):
 
 
 
-
 # INTERACTION CONTROLS
 def press_a():
     """Simulates pressing the 'A' button on the emulator. Uses the A_BUTTON_KEYBIND value from config file"""
@@ -30,7 +29,6 @@ def press_a():
 def press_b():
     """Simulates pressing the 'B' button on the emulator. Uses the B_BUTTON_KEYBIND value from config file"""
     press_button(config.B_BUTTON_KEYBIND)
-
 
 
 
@@ -58,7 +56,6 @@ def run_up_for(time: int):
         press_button(config.UP_BUTTON_KEYBIND, time)
 
 
-
 def move_right(spaces: int):
     """
     Moves a given number of spaces right on normal speed. Note that fast foward increases the number of steps by ~ 1.5
@@ -80,7 +77,6 @@ def run_right_for(time: int):
     """Runs right for a given amount of time"""
     with pyautogui.hold(config.B_BUTTON_KEYBIND):
         press_button(config.RIGHT_BUTTON_KEYBIND, time)
-
 
 
 def move_down(spaces: int):
@@ -106,7 +102,6 @@ def run_down_for(time: int):
         press_button(config.DOWN_BUTTON_KEYBIND, time)
     
 
-
 def move_left(spaces: int):
     """
     Moves a given number of spaces left on normal speed. Note that fast foward increases the number of steps by ~ 1.5
@@ -131,7 +126,6 @@ def run_left_for(time: int):
 
 
 
-
 # MENU CONTROLS
 def open_menu():
     """Opens the menu in game"""
@@ -139,11 +133,11 @@ def open_menu():
 
 
 
-
 # SYSTEM CONTROLS
 def reset():
     """Soft resets the emulator using the bound reset hotkey"""
     press_button(config.RESET_BUTTON_KEYBIND)
+
 
 def toggle_fast_forward():
     """Toggles the fast forward mode on by pressing down and releasing 'TAB'"""

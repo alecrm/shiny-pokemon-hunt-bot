@@ -49,47 +49,61 @@ def take_screenshot(name: str = None, region=None):
         pyautogui.screenshot(f'screenshots/{screenshot_name}', region)
 
 
-# TODO: Set a base pixel size and have a config for screen size. Then multiply base size by value?
-def check_for_image(image_name: str, search_image_path: str = None, confidence: int = 0.9) -> bool:
-    search_image = None
+def check_for_image(search_image_name: str, parent_image_path: str = None, confidence: int = 0.9) -> bool:
+    """Looks for a given image inside a given screenshot. If no screenshot is given, it takes a screenshot"""
+    # Tries to get the image from the name
+    parent_image = None
     try:
-        image_path = os.path.join(base_image_check_folder_path, image_name)
-        image = Image.open(image_path)
+        search_image_path = os.path.join(base_image_check_folder_path, search_image_name)
+        search_image = Image.open(search_image_path)
     except IOError:
-        raise IOError(f'Could not find an image at this location: [{image_path}]')
+        raise IOError(f'Could not find an image at this location: [{search_image_path}]')
     
-    if search_image_path != None:
+    # If a search image path is provided, tries to get the image from the path.
+    #  If no search image path is provided, takes a screenshot and uses this image
+    if parent_image_path != None:
         try:
-            search_image = Image.open(search_image_path)
+            parent_image = Image.open(parent_image_path)
         except IOError:
-            raise IOError(f'Could not find an image at this location: [{search_image_path}]')
+            raise IOError(f'Could not find an image at this location: [{parent_image_path}]')
     else:
         take_screenshot()
         try:
-            search_image = Image.open(screenshot_path)
+            parent_image = Image.open(screenshot_path)
         except IOError:
             raise IOError(f'Could not find an image at this location: [{screenshot_path}]')
 
-    search_image = search_image.resize((2484, 1351))
-    if pyautogui.locate(image, search_image, confidence=confidence) == None:
+    # Resizes the taken screenshot to roughly match the size that the image check images were taken at
+    parent_image = parent_image.resize((2484, 1351))
+
+    # Attempts to locate the search image inside the parent image
+    if pyautogui.locate(search_image, parent_image, confidence=confidence) == None:
         return False
     else:
         return True
     
 
 def check_for_shiny(pokemon_name: str) -> bool:
+    """Checks to see if the base pokemon screenshot is NOT currently on the screen"""
     return not check_for_image(f'pokemon/{pokemon_name}.png', confidence=0.97)
 
 
 def check_in_battle() -> bool:
+    """Checks to see if the enemy's health bar is currently on the screen"""
     return check_for_image('in_battle_check.png')
 
 
 def check_for_recap_screen() -> bool:
+    """Checks to see if the recap screen is currently displaying"""
     return check_for_image('recap_screen_check.png')
 
 
 def check_mesprit_is_here() -> bool:
+    """
+    Checks to see if Mesprit is currently in our route. We first try to get a screenshot
+    that has the roaming pokemon icon visible. We then check to see if the roaming
+    pokemon icon is in the same route as us
+    """
     max_tries = 10
     attempt = 1
     is_icon_visible = False
