@@ -347,6 +347,7 @@ def cresselia_shiny_hunt():
     """
     raise NotImplementedError('Cresselia shiny hunt method has not been implemented yet')
 
+
 def setup_crop_coordinates():
     """
     Setup method for guiding users through getting the values to set the [SCREEN_CROP_COORDINATES] config value
