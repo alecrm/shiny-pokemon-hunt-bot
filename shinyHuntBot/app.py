@@ -32,7 +32,7 @@ try_count = config.TRY_COUNT
 failure_count = 0
 
 # Capitalize pokemon name to ensure it matches the format we expect to see
-pokemon_name = config.POKEMON_NAME if config.POKEMON_NAME == 'SETUP' else config.POKEMON_NAME.capitalize()
+pokemon_name = config.POKEMON_NAME.upper() if config.POKEMON_NAME.upper() == 'SETUP' else config.POKEMON_NAME.lower().capitalize()
 
 ###################################################################################################
 ###################################################################################################
