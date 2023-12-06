@@ -41,7 +41,8 @@ pokemon_name = config.POKEMON_NAME.upper() if config.POKEMON_NAME.upper() == 'SE
 
 # FUNCTIONS
 ###################################################################################################
-def skip_dialogue(num_times: int):
+
+def skip_dialogue(num_times: int, pause: int = 0.3):
     """
     Skips through dialogue when initiating the static encounter.
     'num_times' should be the number of times you have to press 'A'
@@ -49,7 +50,7 @@ def skip_dialogue(num_times: int):
     i = 1
     while i <= num_times:
         controls.press_a()
-        sleep(0.3)
+        sleep(pause)
         i += 1
 
 
@@ -60,19 +61,19 @@ def load_game():
     """
     # Soft reset emulator
     controls.reset()
-    sleep(2)
+    sleep(12)
 
     # Press A to skip intro screen
     controls.press_a()
-    sleep(0.5)
+    sleep(2)
 
     # Press A to move past title screen
     controls.press_a()
-    sleep(0.5)
+    sleep(4)
 
     # Press A to load the game
     controls.press_a()
-    sleep(0.25)
+    sleep(3)
 
 
 def check_for_recap_screen():
@@ -85,15 +86,15 @@ def check_for_recap_screen():
     screenshot.take_screenshot()
     if screenshot.check_for_recap_screen():
         controls.press_b()
-        sleep(0.5)
+        sleep(3)
         controls.open_menu()
         controls.move_down(4)
         controls.press_a()
-        sleep(0.3)
+        sleep(2)
         controls.press_a()
-        sleep(0.3)
+        sleep(2)
         controls.press_a()
-        sleep(4.2)
+        sleep(10)
 
 
 def is_in_battle() -> bool:
@@ -152,13 +153,13 @@ def static_shiny_hunt():
 
         # Press A to battle Pokemon
         controls.press_a()
-        sleep(0.2)
+        sleep(.6)
 
         if pokemon_name == 'Rotom':
             skip_dialogue(3)
         else:
             skip_dialogue(1)
-        sleep(2.5)
+        sleep(9)
 
         # Confirms the emulator successfully got into the battle. Kills the app after 10 consecutive failures
         if not is_in_battle():
@@ -190,6 +191,7 @@ def mesprit_shiny_hunt():
     global try_count
     global exit_message
     
+    
     while True:
         should_restart = False
         start_time = time()
@@ -203,58 +205,59 @@ def mesprit_shiny_hunt():
 
         ################################### TRIGGERING MESPRIT HUNT ####################################
         # Skip through Mesprit disappearing
-        skip_dialogue(3)
-        sleep(0.7)
+        skip_dialogue(3, 1.5)
+        sleep(2)
 
         # Skip through Rowan appearing
-        skip_dialogue(1)
-        sleep(0.7)
+        skip_dialogue(1, 1.5)
+        sleep(2)
 
         # Skip through Rowan's dialogue part 1
-        skip_dialogue(8)
-        sleep(0.7)
+        skip_dialogue(8, 1.5)
+        sleep(2)
 
         # Skip through Rowan's dialogue part 2
-        skip_dialogue(8)
-        sleep(0.85)
+        skip_dialogue(8, 1.5)
+        sleep(2.75)
 
         ######################################## Exiting Cave ###########################################
         # Runs right to align with cave entrance
-        controls.run_right(1)
+        controls.run_right_for(0.26)
+        # sleep(0.3)
 
         # Runs down to exit cave
-        controls.run_down_for(0.75)
-        sleep(0.85)
+        controls.run_down_for(2.2)
+        sleep(2.75)
 
         ####################################### Fly to Jubilife ########################################
         # Opens menu and opens 'Pokemon' screen
         controls.open_menu()
         controls.move_down(1)
         controls.press_a()
-        sleep(0.8)
+        sleep(1.75)
 
         # Selects flying pokemon and selects 'Fly'
-        controls.toggle_fast_forward() # We slow it down so that we're able to easily select a pokemon
+        # controls.toggle_fast_forward() # We slow it down so that we're able to easily select a pokemon
         controls.move_down(1)
         controls.press_a()
         controls.move_down(1)
         controls.press_a()
-        sleep(1.3)
+        sleep(1.5)
 
         # Selects Jubilife city as the destination to fly to
         controls.move_right(2)
         controls.move_up(2)
-        controls.toggle_fast_forward() # We speed up now to zoom through the fly cutscene
-        sleep(0.5)
+        # controls.toggle_fast_forward() # We speed up now to zoom through the fly cutscene
+        sleep(0.2)
         controls.press_a()
-        sleep(3.3)
+        sleep(10.3)
 
         #################################### Navigate to Route 202 #####################################
         # Moves to the left and then down to get out of Jubilife City
-        controls.run_left_for(0.2455)
-        controls.run_down_for(1.180825)
-        controls.run_right_for(0.2455)
-        controls.run_down_for(0.5)
+        controls.run_left_for(0.8)
+        controls.run_down_for(3.05)
+        controls.run_right_for(0.65)
+        controls.run_down_for(1.6)
 
         ####################################### Hunt for Mesprit ########################################
         # Continues to move between Jubilife City & Route 202 until Mesprit arrives
@@ -271,8 +274,8 @@ def mesprit_shiny_hunt():
                 break
 
             # If Mesprit is still not here, moves up into Jubilife City and back down into Route 202
-            controls.run_up_for(0.5)
-            controls.run_down_for(0.5)
+            controls.run_up_for(1.4)
+            controls.run_down_for(1.4)
         
         # Checks to see if we broke out of the mesprit hunt to restart
         if should_restart:
@@ -284,21 +287,25 @@ def mesprit_shiny_hunt():
         controls.open_menu()
         controls.move_down(1)
         controls.press_a()
-        sleep(0.7)
+        sleep(1.75)
 
         # Applies Max Repel
         controls.press_a()
+        sleep(0.4)
         controls.press_a()
+        sleep(0.4)
         controls.press_a()
+        sleep(0.4)
 
         # Closes bag
         controls.press_b()
-        sleep(0.7)
+        sleep(2)
         controls.press_b()
+        sleep(0.4)
 
         ####################################### Trigger battle #########################################
         # Moves into grass
-        controls.move_right(1)
+        controls.move_right(2)
 
         # Continues to move in the grass until we find Mesprit
         start_battle_time = time() # Used to track how long we've been trying to initiate a battle
@@ -307,7 +314,7 @@ def mesprit_shiny_hunt():
 
             # If we don't see the route path, we recognize we're in a battle and break out of the loop
             if not screenshot.check_for_path():
-                sleep(2.2)
+                sleep(9)
                 break
 
             # Restarts the app if we've been trying for more than 5 minutes
@@ -316,9 +323,9 @@ def mesprit_shiny_hunt():
                 break
 
             # If we're still not in the battle, we'll run to the right and run back to the left
-            controls.run_right_for(0.1)
-            controls.run_left_for(0.1)
-            sleep(0.5)
+            controls.run_right_for(0.5)
+            controls.run_left_for(0.5)
+            sleep(1.5)
 
         # Checks to see if we broke out of the mesprit hunt to restart
         if should_restart:
