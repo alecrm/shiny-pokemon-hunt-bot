@@ -347,6 +347,39 @@ def cresselia_shiny_hunt():
     """
     raise NotImplementedError('Cresselia shiny hunt method has not been implemented yet')
 
+def setup_crop_coordinates():
+    """
+    Setup method for guiding users through getting the values to set the [SCREEN_CROP_COORDINATES] config value
+    """
+    # Grabs the LEFT coordinate value
+    print(f'\nPlease position your mouse at the very left side of the emulator window within 5 seconds')
+    sleep(5)
+    left, _ = pyautogui.position()
+    print(f'Left value: {left}\n{config.MESSAGE_SPACING_SYMBOLS}')
+
+    # Grabs the TOP coordinate value
+    print(f'\nPlease position your mouse at the top of the actual emulator window (Just below the menu bar) within 5 seconds')
+    sleep(5)
+    _, top = pyautogui.position()
+    print(f'Top value: {top}\n{config.MESSAGE_SPACING_SYMBOLS}')
+
+    # Grabs the WIDTH coordinate value
+    print(f'\nPlease position your mouse at the very right side of the emulator window within 5 seconds')
+    sleep(5)
+    right, _ = pyautogui.position()
+    width = right - left
+    print(f'Width value: {width}\n{config.MESSAGE_SPACING_SYMBOLS}')
+
+    # Grabs the HEIGHT coordinate value
+    print(f'\nPlease position your mouse at the very bottom side of the emulator window within 5 seconds')
+    sleep(5)
+    _, bottom = pyautogui.position()
+    height = bottom - top
+    print(f'Bottom value: {bottom}\n{config.MESSAGE_SPACING_SYMBOLS}')
+
+    config_value = (left, top, width, height)
+    print(f'\nPlease replace the [SCREEN_CROP_COORDINATES] with this value (including parentheses): {config_value}')
+
 
 # TODO: Update is_shiny() method so that it compares an partial image of the hunted pokemon against the screenshot
 #        - Have a folder structure of pokemon_compare_images/$POKEMON_NAME/image.png
@@ -359,12 +392,12 @@ if __name__ == "__main__":
     if pokemon_name not in config.VALID_POKEMON_LIST and pokemon_name != 'SETUP':
         raise ValueError(f'[{pokemon_name}] is not a valid pokemon to shiny hunt! Please select from the list of available pokemon')
         
-    # Quick pause at the start of the app
-    sleep(1)
+    # Quick pause at the start of the app in case the user needs to switch to the emulator window
+    sleep(3)
     
     # Decides what startup message to print
     if pokemon_name == 'SETUP':
-        print(f'{config.MESSAGE_SPACING_SYMBOLS}\nRunning Screen Position Setup. Please position your mouse within 5 seconds\n{config.MESSAGE_SPACING_SYMBOLS}')
+        print(f'{config.MESSAGE_SPACING_SYMBOLS}\nRunning Screen Position Setup. Please ensure your emulator window is full screen and active\n{config.MESSAGE_SPACING_SYMBOLS}')
     else:
         print(f'{config.MESSAGE_SPACING_SYMBOLS}\nStarting hunt for shiny {pokemon_name}!\n{config.MESSAGE_SPACING_SYMBOLS}')
         pyautogui.click(*config.EMULATOR_EMPTY_CLICK_COORDINATES)
@@ -373,9 +406,7 @@ if __name__ == "__main__":
     # SHINY HUNT FUNCTION CALL
     match pokemon_name:
         case 'SETUP':
-            sleep(5)
-            x, y = pyautogui.position()
-            print(f'X POSITION: {x}\nY POSITION: {y}')
+            setup_crop_coordinates()
         case 'Mesprit':
             mesprit_shiny_hunt()
         case 'Cresellia':
@@ -385,6 +416,6 @@ if __name__ == "__main__":
     
     # Once the shiny hunt exits, prints the reason for exiting
     if pokemon_name == 'SETUP':
-        print(f'{config.MESSAGE_SPACING_SYMBOLS}\nPlease input the results into the [SCREENSHOT_CROP_COORDINDATES] config value\n{config.MESSAGE_SPACING_SYMBOLS}')
+        print(f'{config.MESSAGE_SPACING_SYMBOLS}\nExiting setup! Remember to set a pokemon to hunt in the config value [POKEMON_NAME] :) Happy shiny hunting!\n{config.MESSAGE_SPACING_SYMBOLS}')
     else:
         print(f'{config.MESSAGE_SPACING_SYMBOLS}\n{exit_message}\nShutting down app\n{config.MESSAGE_SPACING_SYMBOLS}')
