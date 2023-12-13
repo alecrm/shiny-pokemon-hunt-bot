@@ -218,16 +218,16 @@ def mesprit_shiny_hunt():
 
         # Skip through Rowan's dialogue part 2
         skip_dialogue(8, 1.5)
-        sleep(2.75)
+        sleep(3)
 
         ######################################## Exiting Cave ###########################################
         # Runs right to align with cave entrance
-        controls.run_right_for(0.26)
-        # sleep(0.3)
+        controls.run_right_for(0.24)
+        sleep(0.3)
 
         # Runs down to exit cave
         controls.run_down_for(2.2)
-        sleep(2.75)
+        sleep(3)
 
         ####################################### Fly to Jubilife ########################################
         # Opens menu and opens 'Pokemon' screen
