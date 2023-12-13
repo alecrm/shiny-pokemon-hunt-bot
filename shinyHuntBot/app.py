@@ -156,9 +156,11 @@ def static_shiny_hunt():
 
         if pokemon_name == 'Rotom':
             skip_dialogue(3)
+        elif pokemon_name in ['Dialga', 'Palkia']:
+            skip_dialogue(5)
         else:
             skip_dialogue(1)
-        sleep(2.5)
+        sleep(3)
 
         # Confirms the emulator successfully got into the battle. Kills the app after 10 consecutive failures
         if not is_in_battle():
