@@ -233,12 +233,14 @@ def mesprit_shiny_hunt():
         controls.open_menu()
         controls.move_down(1)
         controls.press_a()
-        sleep(0.8)
+        sleep(1.2)
 
         # Selects flying pokemon and selects 'Fly'
         controls.toggle_fast_forward() # We slow it down so that we're able to easily select a pokemon
+        sleep(0.3)
         controls.move_down(1)
         controls.press_a()
+        sleep(0.3)
         controls.move_down(1)
         controls.press_a()
         sleep(1.3)
@@ -384,8 +386,10 @@ def setup_crop_coordinates():
     print(f'\nPlease replace the [SCREEN_CROP_COORDINATES] with this value (including parentheses): {config_value}')
 
 
-# TODO: Update is_shiny() method so that it compares an partial image of the hunted pokemon against the screenshot
-#        - Have a folder structure of pokemon_compare_images/$POKEMON_NAME/image.png
+# TODO:
+#       - Update is_shiny() method so that it compares an partial image of the hunted pokemon against the screenshot
+#       - Update fly to Jubilife to recognize when we've just saved and need to move differently to get to Pokemon
+
 if __name__ == "__main__":
     """
     Main app function call. Chooses which shiny hunt function to
