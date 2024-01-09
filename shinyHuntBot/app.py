@@ -158,6 +158,8 @@ def static_shiny_hunt():
             skip_dialogue(3)
         elif pokemon_name in ['Dialga', 'Palkia']:
             skip_dialogue(5)
+        elif pokemon_name == 'Regigigas':
+            skip_dialogue(8)
         else:
             skip_dialogue(1)
         sleep(3)
