@@ -186,74 +186,31 @@ def static_shiny_hunt():
     print(f'This attempt took: {strftime("%M minutes and %S seconds", localtime(elapsed_time))}\n')
 
 
-def mesprit_shiny_hunt():
+def roaming_hunt():
     """
-    Main function for hunting Mesprit. Because the roaming pokemon (Mesprit and Cresselia)
+    Main function for hunting roaming pokemon. Because the roaming pokemon (Mesprit and Cresselia)
     are so unique (aka annoying), they get their entire own function. Yay!
     """
+
     global try_count
     global exit_message
-    
+
     while True:
         should_restart = False
         start_time = time()
         # Displays the current attempt start time and number
         print(f'{strftime("%Y-%m-%d %I:%M:%S %p", localtime(time()))} --- Attempt number: {try_count}')
-
+        
         ######################################### STARTING GAME #########################################
         # Soft resets game
         load_game()
         check_for_recap_screen()
 
-        ################################### TRIGGERING MESPRIT HUNT ####################################
-        # Skip through Mesprit disappearing
-        skip_dialogue(3)
-        sleep(0.7)
+        if pokemon_name == 'Mesprit':
+            mesprit_shiny_hunt()
+        elif pokemon_name == 'Cresselia':
+            cresselia_shiny_hunt()
 
-        # Skip through Rowan appearing
-        skip_dialogue(1)
-        sleep(0.7)
-
-        # Skip through Rowan's dialogue part 1
-        skip_dialogue(8)
-        sleep(0.7)
-
-        # Skip through Rowan's dialogue part 2
-        skip_dialogue(8)
-        sleep(0.85)
-
-        ######################################## Exiting Cave ###########################################
-        # Runs right to align with cave entrance
-        controls.run_right(1)
-
-        # Runs down to exit cave
-        controls.run_down_for(0.75)
-        sleep(0.85)
-
-        ####################################### Fly to Jubilife ########################################
-        # Opens menu and opens 'Pokemon' screen
-        controls.open_menu()
-        controls.move_down(1)
-        controls.press_a()
-        sleep(1.2)
-
-        # Selects flying pokemon and selects 'Fly'
-        controls.toggle_fast_forward() # We slow it down so that we're able to easily select a pokemon
-        sleep(0.3)
-        controls.move_down(1)
-        controls.press_a()
-        sleep(0.3)
-        controls.move_down(1)
-        controls.press_a()
-        sleep(1.3)
-
-        # Selects Jubilife city as the destination to fly to
-        controls.move_right(2)
-        controls.move_up(2)
-        controls.toggle_fast_forward() # We speed up now to zoom through the fly cutscene
-        sleep(0.5)
-        controls.press_a()
-        sleep(3.3)
 
         #################################### Navigate to Route 202 #####################################
         # Moves to the left and then down to get out of Jubilife City
@@ -343,6 +300,63 @@ def mesprit_shiny_hunt():
     # Calculates and prints successful attempt length
     elapsed_time = time() - start_time
     print(f'This attempt took: {strftime("%M minutes and %S seconds", localtime(elapsed_time))}\n')
+    
+
+def mesprit_shiny_hunt():
+    """
+    Main function for hunting Mesprit. Because the roaming pokemon (Mesprit and Cresselia)
+    are so unique (aka annoying), they get their entire own function. Yay!
+    """
+
+    ################################### TRIGGERING MESPRIT HUNT ####################################
+    # Skip through Mesprit disappearing
+    skip_dialogue(3)
+    sleep(0.7)
+
+    # Skip through Rowan appearing
+    skip_dialogue(1)
+    sleep(0.7)
+
+    # Skip through Rowan's dialogue part 1
+    skip_dialogue(8)
+    sleep(0.7)
+
+    # Skip through Rowan's dialogue part 2
+    skip_dialogue(8)
+    sleep(0.85)
+
+    ######################################## EXITING CAVE ###########################################
+    # Runs right to align with cave entrance
+    controls.run_right(1)
+
+    # Runs down to exit cave
+    controls.run_down_for(0.75)
+    sleep(0.85)
+
+    ####################################### Fly to Jubilife ########################################
+    # Opens menu and opens 'Pokemon' screen
+    controls.open_menu()
+    controls.move_down(1)
+    controls.press_a()
+    sleep(1.2)
+
+    # Selects flying pokemon and selects 'Fly'
+    controls.toggle_fast_forward() # We slow it down so that we're able to easily select a pokemon
+    sleep(0.3)
+    controls.move_down(1)
+    controls.press_a()
+    sleep(0.3)
+    controls.move_down(1)
+    controls.press_a()
+    sleep(1.3)
+
+    # Selects Jubilife city as the destination to fly to
+    controls.move_right(2)
+    controls.move_up(2)
+    controls.toggle_fast_forward() # We speed up now to zoom through the fly cutscene
+    sleep(0.5)
+    controls.press_a()
+    sleep(3.3)
 
 
 # TODO: Implement cresselia_shiny_hunt
@@ -351,7 +365,53 @@ def cresselia_shiny_hunt():
     Main function for hunting Cresselia. Because the roaming pokemon (Cresselia and Mesprit)
     are so unique (aka annoying), they get their entire own function. Yay!
     """
-    raise NotImplementedError('Cresselia shiny hunt method has not been implemented yet')
+    
+    ################################### TRIGGERING CRESSELIA HUNT ####################################
+    # Skip through Cresselia disappearing
+    skip_dialogue(4)
+    sleep(0.7)
+
+    ######################################## EXITING WOODS ###########################################
+    controls.run_down_for(0.3)
+    sleep(0.3)
+
+    ######################################## LEAVING ISLAND ###########################################
+    controls.run_down_for(0.1)
+    controls.run_left_for(0.05)
+    controls.run_up_for(0.1)
+    controls.run_left_for(0.33)
+    controls.run_up_for(0.05)
+    controls.run_left_for(0.1)
+    controls.run_down_for(0.3)
+    controls.run_right_for(0.05)
+    controls.run_down_for(0.01)
+    controls.move_right(1)
+    skip_dialogue(2)
+    sleep(2)
+
+    ####################################### Fly to Jubilife ########################################
+    # Opens menu and opens 'Pokemon' screen
+    controls.open_menu()
+    controls.move_down(1)
+    controls.press_a()
+    sleep(1.2)
+
+    # Selects flying pokemon and selects 'Fly'
+    controls.toggle_fast_forward() # We slow it down so that we're able to easily select a pokemon
+    sleep(0.3)
+    controls.move_down(1)
+    controls.press_a()
+    sleep(0.3)
+    controls.move_down(1)
+    controls.press_a()
+    sleep(1.3)
+
+    # Selects Jubilife city as the destination to fly to
+    controls.move_right(3)
+    controls.toggle_fast_forward() # We speed up now to zoom through the fly cutscene
+    sleep(0.5)
+    controls.press_a()
+    sleep(3.3)
 
 
 def setup_crop_coordinates():
@@ -416,10 +476,8 @@ if __name__ == "__main__":
     match pokemon_name:
         case 'SETUP':
             setup_crop_coordinates()
-        case 'Mesprit':
-            mesprit_shiny_hunt()
-        case 'Cresellia':
-            cresselia_shiny_hunt()
+        case 'Mesprit' | 'Cresselia':
+            roaming_hunt()
         case _:
             static_shiny_hunt()
     
